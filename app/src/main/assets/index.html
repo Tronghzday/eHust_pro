@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chi Tiêu - Trọng & Bình</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #FFF5E6;
+            min-height: 100vh;
+            color: #2C3E50;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+            padding: 22px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.25);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: white;
+        }
+
+        .date-info {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            letter-spacing: 0.2px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Balance Section */
+        .balance-section {
+            padding: 28px 18px;
+            background: linear-gradient(180deg, #FFEAA7 0%, #FFF5E6 100%);
+        }
+
+        .balance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .balance-card {
+            background: white;
+            padding: 20px 16px;
+            border-radius: 14px;
+            border-left: 5px solid;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 70px;
+            height: 70px;
+            background: rgba(231, 76, 60, 0.04);
+            border-radius: 50%;
+            transform: translate(25px, -25px);
+        }
+
+        .balance-card.trong {
+            border-color: #E74C3C;
+        }
+
+        .balance-card.binh {
+            border-color: #F39C12;
+        }
+
+        .balance-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: #7F8C8D;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        .balance-amount {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .balance-card.trong .balance-amount {
+            color: #E74C3C;
+        }
+
+        .balance-card.binh .balance-amount {
+            color: #F39C12;
+        }
+
+        /* Compare Bar */
+        .compare-bar {
+            background: white;
+            padding: 18px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            border: 2px solid #FFEAA7;
+        }
+
+        .compare-text {
+            font-size: 12px;
+            font-weight: 700;
+            color: #7F8C8D;
+            margin-bottom: 6px;
+            letter-spacing: 1.5px;
+        }
+
+        .compare-result {
+            font-size: 18px;
+            font-weight: 800;
+            color: #E74C3C;
+            letter-spacing: -0.3px;
+        }
+
+        /* Save Session Button */
+        .save-session-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #27AE60 0%, #229954 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-family: 'Inter', sans-serif;
+            margin-top: 14px;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .save-session-btn:active {
+            transform: scale(0.97);
+        }
+
+        .save-session-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            padding: 18px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 16px 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .action-btn.add {
+            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);
+        }
+
+        .action-btn.view {
+            background: white;
+            color: #E74C3C;
+            border: 2px solid #E74C3C;
+        }
+
+        .action-btn.history {
+            background: linear-gradient(135deg, #8E44AD 0%, #7D3C98 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.25);
+        }
+
+        .action-btn.active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(231, 76, 60, 0.3);
+        }
+
+        .action-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 0 18px 30px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Add Form */
+        .add-form {
+            background: white;
+            padding: 24px 20px;
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            border: 2px solid #FFEAA7;
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            text-align: center;
+            color: #E74C3C;
+            letter-spacing: 0.5px;
+        }
+
+        .input-wrapper {
+            margin-bottom: 18px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #7F8C8D;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px;
+            background: #FFF9F0;
+            border: 2px solid #FFEAA7;
+            border-radius: 10px;
+            color: #2C3E50;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #E74C3C;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.08);
+        }
+
+        .input-field::placeholder {
+            color: #BDC3C7;
+            font-weight: 400;
+        }
+
+        textarea.input-field {
+            resize: vertical;
+            min-height: 80px;
+            line-height: 1.5;
+        }
+
+        /* Person Selector */
+        .person-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .person-option {
+            position: relative;
+        }
+
+        .person-option input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .person-option label {
+            display: block;
+            padding: 14px;
+            background: #FFF9F0;
+            border: 2px solid #FFEAA7;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #2C3E50;
+            letter-spacing: 0.5px;
+        }
+
+        .person-option:first-child input:checked + label {
+            background: #E74C3C;
+            border-color: #E74C3C;
+            transform: scale(1.03);
+            color: white;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);
+        }
+
+        .person-option:last-child input:checked + label {
+            background: #F39C12;
+            border-color: #F39C12;
+            transform: scale(1.03);
+            color: white;
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.25);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #E74C3C 0%, #F39C12 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 16px rgba(231, 76, 60, 0.3);
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.97);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .warning {
+            background: #FFF3CD;
+            border: 2px solid #F39C12;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 14px;
+            display: none;
+            letter-spacing: 0.2px;
+        }
+
+        .warning.show {
+            display: block;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        /* Expense List */
+        .expense-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding: 0 2px;
+        }
+
+        .expense-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: #2C3E50;
+            letter-spacing: 0.3px;
+        }
+
+        .expense-count {
+            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.3px;
+        }
+
+        .expense-item {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            border-left: 4px solid;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .expense-item.trong {
+            border-color: #E74C3C;
+        }
+
+        .expense-item.binh {
+            border-color: #F39C12;
+        }
+
+        .expense-info {
+            flex: 1;
+            padding-right: 12px;
+        }
+
+        .expense-amount {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .expense-item.trong .expense-amount {
+            color: #E74C3C;
+        }
+
+        .expense-item.binh .expense-amount {
+            color: #F39C12;
+        }
+
+        .expense-desc {
+            font-size: 14px;
+            color: #7F8C8D;
+            margin-bottom: 6px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .expense-time {
+            font-size: 11px;
+            color: #95A5A6;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .delete-btn {
+            background: #FADBD8;
+            border: 2px solid #E74C3C;
+            color: #E74C3C;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-btn:active {
+            transform: scale(0.92);
+            background: #E74C3C;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #95A5A6;
+        }
+
+        .empty-icon {
+            font-size: 56px;
+            margin-bottom: 14px;
+            opacity: 0.5;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .filter-tab {
+            flex: 1;
+            padding: 12px;
+            background: white;
+            border: 2px solid #FFEAA7;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #2C3E50;
+            letter-spacing: 0.8px;
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+            border-color: #E74C3C;
+            color: white;
+            box-shadow: 0 3px 10px rgba(231, 76, 60, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .filter-tab.binh-active {
+            background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%);
+            border-color: #F39C12;
+            color: white;
+            box-shadow: 0 3px 10px rgba(243, 156, 18, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* History Session Card */
+        .session-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            border: 2px solid #FFEAA7;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .session-card:active {
+            transform: scale(0.98);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 2px dashed #FFEAA7;
+        }
+
+        .session-date {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2C3E50;
+        }
+
+        .session-badge {
+            background: linear-gradient(135deg, #8E44AD 0%, #7D3C98 100%);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+
+        .session-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .session-person {
+            text-align: center;
+        }
+
+        .session-person-name {
+            font-size: 11px;
+            font-weight: 700;
+            color: #7F8C8D;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .session-person-amount {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .session-person.trong .session-person-amount {
+            color: #E74C3C;
+        }
+
+        .session-person.binh .session-person-amount {
+            color: #F39C12;
+        }
+
+        .session-difference {
+            text-align: center;
+            padding: 12px;
+            background: #FFF9F0;
+            border-radius: 10px;
+            border: 2px solid #FFEAA7;
+        }
+
+        .session-diff-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #7F8C8D;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .session-diff-amount {
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            margin: 40px auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 2px solid #FFEAA7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #2C3E50;
+            letter-spacing: 0.3px;
+        }
+
+        .modal-close {
+            background: #FADBD8;
+            border: 2px solid #E74C3C;
+            color: #E74C3C;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:active {
+            transform: scale(0.92);
+            background: #E74C3C;
+            color: white;
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .modal-summary {
+            background: #FFF9F0;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #FFEAA7;
+        }
+
+        .modal-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .modal-summary-row:last-child {
+            margin-bottom: 0;
+            padding-top: 10px;
+            border-top: 2px dashed #FFEAA7;
+        }
+
+        .modal-summary-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #7F8C8D;
+        }
+
+        .modal-summary-value {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .modal-expenses-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2C3E50;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 14px 24px;
+            border-radius: 10px;
+            border: 2px solid #E74C3C;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            max-width: 90%;
+            color: #2C3E50;
+            font-size: 14px;
+            letter-spacing: 0.2px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            animation: toastIn 0.4s ease;
+        }
+
+        @keyframes toastIn {
+            from {
+                transform: translate(-50%, 15px);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 45px;
+            color: #95A5A6;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #FFF5E6;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #FFEAA7;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F39C12;
+        }
+
+        /* Responsive */
+        @media (max-width: 380px) {
+            .logo {
+                font-size: 20px;
+            }
+
+            .date-info {
+                font-size: 12px;
+            }
+
+            .balance-amount {
+                font-size: 22px;
+            }
+
+            .action-btn {
+                font-size: 12px;
+                padding: 14px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="logo">CHI TIÊU</div>
+        <div class="date-info" id="currentDate"></div>
+    </div>
+
+    <!-- Balance Section -->
+    <div class="balance-section">
+        <div class="balance-grid">
+            <div class="balance-card trong">
+                <div class="balance-name">Trọng</div>
+                <div class="balance-amount" id="balanceTrong">0đ</div>
+            </div>
+            <div class="balance-card binh">
+                <div class="balance-name">Bình</div>
+                <div class="balance-amount" id="balanceBinh">0đ</div>
+            </div>
+        </div>
+        <div class="compare-bar">
+            <div class="compare-text">CHÊNH LỆCH</div>
+            <div class="compare-result" id="compareResult">---</div>
+        </div>
+        <button class="save-session-btn" id="saveSessionBtn">💾 LƯU ĐỢT NÀY & RESET</button>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="action-btn add active" data-view="add">Thêm mới</button>
+        <button class="action-btn view" data-view="list">Chi tiết</button>
+        <button class="action-btn history" data-view="history">Lịch sử</button>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+        <!-- Add Form Section -->
+        <div class="section active" id="addSection">
+            <div class="add-form">
+                <div class="form-title">THÊM CHI TIÊU MỚI</div>
+                <form id="expenseForm">
+                    <div class="input-wrapper">
+                        <label class="input-label">Số tiền</label>
+                        <input type="number" class="input-field" id="amount" placeholder="Nhập số tiền" required min="0" step="1000">
+                    </div>
+
+                    <div class="input-wrapper">
+                        <label class="input-label">Mô tả</label>
+                        <textarea class="input-field" id="description" rows="3" placeholder="Chi vào gì?" required></textarea>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <label class="input-label">Người chi tiêu</label>
+                        <div class="person-selector">
+                            <div class="person-option">
+                                <input type="radio" id="personTrong" name="person" value="Trong">
+                                <label for="personTrong">TRỌNG</label>
+                            </div>
+                            <div class="person-option">
+                                <input type="radio" id="personBinh" name="person" value="Binh">
+                                <label for="personBinh">BÌNH</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="warning" id="warning">Vui lòng chọn người chi tiêu!</div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">THÊM NGAY</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- List Section -->
+        <div class="section" id="listSection">
+            <div class="filter-tabs">
+                <div class="filter-tab active" data-filter="all">TẤT CẢ</div>
+                <div class="filter-tab" data-filter="trong">TRỌNG</div>
+                <div class="filter-tab" data-filter="binh">BÌNH</div>
+            </div>
+
+            <div class="expense-header">
+                <div class="expense-title" id="listTitle">CHI TIÊU CHUNG</div>
+                <div class="expense-count" id="expenseCount">0</div>
+            </div>
+
+            <div id="expenseList">
+                <div class="loading">Đang tải dữ liệu...</div>
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div class="section" id="historySection">
+            <div class="expense-header">
+                <div class="expense-title">LỊCH SỬ CÁC ĐỢT</div>
+                <div class="expense-count" id="sessionCount">0</div>
+            </div>
+
+            <div id="sessionList">
+                <div class="loading">Đang tải dữ liệu...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Modal for Session Detail -->
+<div class="modal" id="sessionModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title" id="modalTitle">Chi tiết đợt</div>
+            <button class="modal-close" onclick="closeSessionModal()">✕</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- Content will be inserted here -->
+        </div>
+    </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import {
+        getFirestore,
+        collection,
+        addDoc,
+        deleteDoc,
+        doc,
+        onSnapshot,
+        query,
+        getDocs,
+        writeBatch,
+        Timestamp,
+        orderBy
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCQFPHkGTGnk6NZcjTDu60yvZYlimHMJq0",
+        authDomain: "manage-link.firebaseapp.com",
+        projectId: "manage-link",
+        storageBucket: "manage-link.firebasestorage.app",
+        messagingSenderId: "656933535765",
+        appId: "1:656933535765:web:a6a56cd7f6134191d1ce1c"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let allExpenses = [];
+    let allSessions = [];
+    let currentFilter = 'all';
+
+    // Show current date
+    const dateOptions = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('vi-VN', dateOptions);
+
+    // View switcher
+    const actionBtns = document.querySelectorAll('.action-btn');
+    const sections = document.querySelectorAll('.section');
+
+    actionBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const view = btn.dataset.view;
+
+            actionBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            sections.forEach(s => s.classList.remove('active'));
+
+            if (view === 'add') {
+                document.getElementById('addSection').classList.add('active');
+            } else if (view === 'list') {
+                document.getElementById('listSection').classList.add('active');
+            } else if (view === 'history') {
+                document.getElementById('historySection').classList.add('active');
+            }
+        });
+    });
+
+    // Filter tabs
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const filter = tab.dataset.filter;
+            currentFilter = filter;
+
+            filterTabs.forEach(t => {
+                t.classList.remove('active', 'binh-active');
+            });
+
+            if (filter === 'binh') {
+                tab.classList.add('binh-active');
+            } else {
+                tab.classList.add('active');
+            }
+
+            updateListTitle();
+            renderExpenses();
+        });
+    });
+
+    // Toast
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Save Session
+    document.getElementById('saveSessionBtn').addEventListener('click', async () => {
+        if (allExpenses.length === 0) {
+            showToast('⚠️ Không có chi tiêu nào để lưu!');
+            return;
+        }
+
+        if (!confirm('Bạn có chắc muốn lưu đợt này và reset về 0đ?\n\nDữ liệu hiện tại sẽ được lưu vào lịch sử.')) {
+            return;
+        }
+
+        const saveBtn = document.getElementById('saveSessionBtn');
+        saveBtn.disabled = true;
+        saveBtn.textContent = '⏳ ĐANG XỬ LÝ...';
+
+        try {
+            // Calculate totals
+            let totalTrong = 0;
+            let totalBinh = 0;
+
+            allExpenses.forEach(exp => {
+                if (exp.person === 'Trong') {
+                    totalTrong += exp.amount;
+                } else if (exp.person === 'Binh') {
+                    totalBinh += exp.amount;
+                }
+            });
+
+            const difference = Math.abs(totalTrong - totalBinh);
+            const winner = totalTrong > totalBinh ? 'Trong' : (totalBinh > totalTrong ? 'Binh' : 'Equal');
+
+            // Save session to database
+            const sessionData = {
+                createdAt: Timestamp.now(),
+                totalTrong: totalTrong,
+                totalBinh: totalBinh,
+                difference: difference,
+                winner: winner,
+                expenseCount: allExpenses.length,
+                expenses: allExpenses.map(exp => ({
+                    person: exp.person,
+                    amount: exp.amount,
+                    description: exp.description,
+                    createdAt: exp.createdAt
+                }))
+            };
+
+            await addDoc(collection(db, 'sessions'), sessionData);
+
+            // Delete all current expenses
+            const batch = writeBatch(db);
+            allExpenses.forEach(exp => {
+                const expenseRef = doc(db, 'expenses', exp.id);
+                batch.delete(expenseRef);
+            });
+            await batch.commit();
+
+            showToast('✓ Đã lưu đợt thành công và reset!');
+
+            // Switch to history view
+            setTimeout(() => {
+                actionBtns[2].click(); // Click history button
+            }, 500);
+
+        } catch (error) {
+            console.error('Error saving session:', error);
+            showToast('✗ Lỗi: ' + error.message);
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.textContent = '💾 LƯU ĐỢT NÀY & RESET';
+        }
+    });
+
+    // Add expense
+    document.getElementById('expenseForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const person = document.querySelector('input[name="person"]:checked');
+        if (!person) {
+            document.getElementById('warning').classList.add('show');
+            setTimeout(() => document.getElementById('warning').classList.remove('show'), 2500);
+            return;
+        }
+
+        const amount = parseFloat(document.getElementById('amount').value);
+        const description = document.getElementById('description').value.trim();
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'ĐANG XỬ LÝ...';
+
+        try {
+            await addDoc(collection(db, 'expenses'), {
+                person: person.value,
+                amount: amount,
+                description: description,
+                createdAt: Timestamp.now()
+            });
+
+            document.getElementById('expenseForm').reset();
+            showToast('✓ Đã thêm chi tiêu thành công!');
+
+            setTimeout(() => {
+                actionBtns[1].click();
+                currentFilter = person.value.toLowerCase();
+                filterTabs.forEach(t => {
+                    t.classList.remove('active', 'binh-active');
+                    if (t.dataset.filter === currentFilter) {
+                        if (currentFilter === 'binh') {
+                            t.classList.add('binh-active');
+                        } else {
+                            t.classList.add('active');
+                        }
+                    }
+                });
+                updateListTitle();
+                renderExpenses();
+            }, 500);
+        } catch (error) {
+            showToast('✗ Lỗi: ' + error.message);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'THÊM NGAY';
+        }
+    });
+
+    // Load all expenses
+    const q = query(collection(db, 'expenses'));
+    onSnapshot(q, (snapshot) => {
+        allExpenses = [];
+        snapshot.forEach(doc => {
+            allExpenses.push({ id: doc.id, ...doc.data() });
+        });
+
+        allExpenses.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+
+        renderExpenses();
+        updateBalances();
+    });
+
+    // Load all sessions
+    const sessionsQuery = query(collection(db, 'sessions'), orderBy('createdAt', 'desc'));
+    onSnapshot(sessionsQuery, (snapshot) => {
+        allSessions = [];
+        snapshot.forEach(doc => {
+            allSessions.push({ id: doc.id, ...doc.data() });
+        });
+
+        renderSessions();
+    });
+
+    function renderExpenses() {
+        const listEl = document.getElementById('expenseList');
+
+        let filtered = allExpenses;
+        if (currentFilter === 'trong') {
+            filtered = allExpenses.filter(e => e.person === 'Trong');
+        } else if (currentFilter === 'binh') {
+            filtered = allExpenses.filter(e => e.person === 'Binh');
+        }
+
+        document.getElementById('expenseCount').textContent = filtered.length;
+
+        if (filtered.length === 0) {
+            listEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Chưa có chi tiêu nào</div></div>';
+        } else {
+            listEl.innerHTML = filtered.map(exp => createExpenseHTML(exp)).join('');
+        }
+    }
+
+    function renderSessions() {
+        const listEl = document.getElementById('sessionList');
+        document.getElementById('sessionCount').textContent = allSessions.length;
+
+        if (allSessions.length === 0) {
+            listEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📚</div><div class="empty-text">Chưa có lịch sử nào</div></div>';
+        } else {
+            listEl.innerHTML = allSessions.map(session => createSessionHTML(session)).join('');
+        }
+    }
+
+    function createSessionHTML(session) {
+        const date = session.createdAt.toDate();
+        const dateStr = date.toLocaleDateString('vi-VN', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        let diffText = '';
+        let diffColor = '#27AE60';
+
+        if (session.winner === 'Trong') {
+            diffText = `Trọng nhiều hơn ${formatMoney(session.difference)}`;
+            diffColor = '#E74C3C';
+        } else if (session.winner === 'Binh') {
+            diffText = `Bình nhiều hơn ${formatMoney(session.difference)}`;
+            diffColor = '#F39C12';
+        } else {
+            diffText = 'Bằng nhau';
+        }
+
+        return `
+            <div class="session-card" onclick="showSessionDetail('${session.id}')">
+                <div class="session-header">
+                    <div class="session-date">📅 ${dateStr}</div>
+                    <div class="session-badge">${session.expenseCount} chi tiêu</div>
+                </div>
+                <div class="session-summary">
+                    <div class="session-person trong">
+                        <div class="session-person-name">Trọng</div>
+                        <div class="session-person-amount">${formatMoney(session.totalTrong)}</div>
+                    </div>
+                    <div class="session-person binh">
+                        <div class="session-person-name">Bình</div>
+                        <div class="session-person-amount">${formatMoney(session.totalBinh)}</div>
+                    </div>
+                </div>
+                <div class="session-difference">
+                    <div class="session-diff-label">Chênh lệch</div>
+                    <div class="session-diff-amount" style="color: ${diffColor}">${diffText}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    window.showSessionDetail = function(sessionId) {
+        const session = allSessions.find(s => s.id === sessionId);
+        if (!session) return;
+
+        const date = session.createdAt.toDate();
+        const dateStr = date.toLocaleDateString('vi-VN', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        let diffText = '';
+        let diffColor = '#27AE60';
+
+        if (session.winner === 'Trong') {
+            diffText = `Trọng nhiều hơn ${formatMoney(session.difference)}`;
+            diffColor = '#E74C3C';
+        } else if (session.winner === 'Binh') {
+            diffText = `Bình nhiều hơn ${formatMoney(session.difference)}`;
+            diffColor = '#F39C12';
+        } else {
+            diffText = 'Bằng nhau';
+        }
+
+        const modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = `
+            <div class="modal-summary">
+                <div class="modal-summary-row">
+                    <span class="modal-summary-label">📅 Thời gian:</span>
+                    <span class="modal-summary-value">${dateStr}</span>
+                </div>
+                <div class="modal-summary-row">
+                    <span class="modal-summary-label">Chi tiêu Trọng:</span>
+                    <span class="modal-summary-value" style="color: #E74C3C">${formatMoney(session.totalTrong)}</span>
+                </div>
+                <div class="modal-summary-row">
+                    <span class="modal-summary-label">Chi tiêu Bình:</span>
+                    <span class="modal-summary-value" style="color: #F39C12">${formatMoney(session.totalBinh)}</span>
+                </div>
+                <div class="modal-summary-row">
+                    <span class="modal-summary-label">Kết quả:</span>
+                    <span class="modal-summary-value" style="color: ${diffColor}">${diffText}</span>
+                </div>
+            </div>
+
+            <div class="modal-expenses-title">Chi tiết các khoản chi (${session.expenseCount})</div>
+            ${session.expenses.map(exp => createModalExpenseHTML(exp)).join('')}
+        `;
+
+        document.getElementById('sessionModal').classList.add('active');
+    };
+
+    window.closeSessionModal = function() {
+        document.getElementById('sessionModal').classList.remove('active');
+    };
+
+    // Close modal when clicking outside
+    document.getElementById('sessionModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeSessionModal();
+        }
+    });
+
+    function createModalExpenseHTML(expense) {
+        let timeStr = '';
+        if (expense.createdAt) {
+            const date = expense.createdAt.toDate();
+            timeStr = date.toLocaleDateString('vi-VN', {
+                day: '2-digit',
+                month: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        return `
+            <div class="expense-item ${expense.person.toLowerCase()}" style="margin-bottom: 12px;">
+                <div class="expense-info">
+                    <div class="expense-amount">${formatMoney(expense.amount)}</div>
+                    <div class="expense-desc">${escapeHtml(expense.description)}</div>
+                    <div class="expense-time">${timeStr}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function updateListTitle() {
+        const titleEl = document.getElementById('listTitle');
+        if (currentFilter === 'all') {
+            titleEl.textContent = 'TẤT CẢ CHI TIÊU';
+        } else if (currentFilter === 'trong') {
+            titleEl.textContent = 'CHI TIÊU CỦA TRỌNG';
+        } else {
+            titleEl.textContent = 'CHI TIÊU CỦA BÌNH';
+        }
+    }
+
+    function createExpenseHTML(expense) {
+        let timeStr = '';
+        if (expense.createdAt) {
+            const date = expense.createdAt.toDate();
+            const now = new Date();
+            const diff = now - date;
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (hours < 1) {
+                timeStr = 'Vừa xong';
+            } else if (hours < 24) {
+                timeStr = hours + ' giờ trước';
+            } else if (days === 1) {
+                timeStr = 'Hôm qua';
+            } else {
+                timeStr = date.toLocaleDateString('vi-VN');
+            }
+        }
+
+        return `
+            <div class="expense-item ${expense.person.toLowerCase()}">
+                <div class="expense-info">
+                    <div class="expense-amount">${formatMoney(expense.amount)}</div>
+                    <div class="expense-desc">${escapeHtml(expense.description)}</div>
+                    <div class="expense-time">${timeStr}</div>
+                </div>
+                <button class="delete-btn" onclick="deleteExpense('${expense.id}')">✕</button>
+            </div>
+        `;
+    }
+
+    // Delete
+    window.deleteExpense = async (id) => {
+        if (confirm('Xác nhận xóa chi tiêu này?')) {
+            try {
+                await deleteDoc(doc(db, 'expenses', id));
+                showToast('✓ Đã xóa thành công!');
+            } catch (error) {
+                showToast('✗ Lỗi khi xóa!');
+            }
+        }
+    };
+
+    // Update balances
+    function updateBalances() {
+        let totalTrong = 0;
+        let totalBinh = 0;
+
+        allExpenses.forEach(exp => {
+            if (exp.person === 'Trong') {
+                totalTrong += exp.amount;
+            } else if (exp.person === 'Binh') {
+                totalBinh += exp.amount;
+            }
+        });
+
+        document.getElementById('balanceTrong').textContent = formatMoney(totalTrong);
+        document.getElementById('balanceBinh').textContent = formatMoney(totalBinh);
+
+        const diff = Math.abs(totalTrong - totalBinh);
+        const compareEl = document.getElementById('compareResult');
+
+        if (totalTrong > totalBinh) {
+            compareEl.textContent = `Trọng nhiều hơn ${formatMoney(diff)}`;
+            compareEl.style.color = '#E74C3C';
+        } else if (totalBinh > totalTrong) {
+            compareEl.textContent = `Bình nhiều hơn ${formatMoney(diff)}`;
+            compareEl.style.color = '#F39C12';
+        } else {
+            compareEl.textContent = 'Bằng nhau';
+            compareEl.style.color = '#27AE60';
+        }
+    }
+
+    function formatMoney(amount) {
+        if (amount >= 1000000) {
+            return (amount / 1000000).toFixed(1).replace('.0', '') + 'tr';
+        } else if (amount >= 1000) {
+            return (amount / 1000).toFixed(0) + 'k';
+        }
+        return amount.toLocaleString('vi-VN') + 'đ';
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Pull to refresh
+    let startY = 0;
+    document.addEventListener('touchstart', e => startY = e.touches[0].pageY, { passive: true });
+    document.addEventListener('touchend', e => {
+        if (window.scrollY === 0 && e.changedTouches[0].pageY > startY + 100) {
+            location.reload();
+        }
+    }, { passive: true });
+</script>
+</body>
+</html>
